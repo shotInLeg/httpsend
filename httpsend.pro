@@ -6,4 +6,6 @@ CONFIG -= qt
 SOURCES += main.cpp
 
 HEADERS += \
-    ANetworkTransfer/ahttptransfer.h
+    ANetworkTransfer/AHttp/ahttpdata.h \
+    ANetworkTransfer/AHttp/ahttpparse.h \
+    ANetworkTransfer/AHttp/ahttptransfer.h

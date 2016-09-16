@@ -3,7 +3,7 @@
 #include <vector>
 #include <map>
 
-#include "ANetworkTransfer/ahttptransfer.h"
+#include "ANetworkTransfer/AHttp/ahttptransfer.h"
 
 using namespace std;
 
@@ -53,65 +53,6 @@ void printParams( std::map< std::string, std::vector<std::string> >& params )
     }
 }
 
-std::string getProtocol( const std::string& url )
-{
-    std::string protocol = "";
-    char last_symbol = '\0';
-    for( int i = 0; i < (int)url.size(); i++ )
-    {
-        protocol += url[i];
-
-        if( (last_symbol == '\\' && url[i] == '\\') || (last_symbol == '/' && url[i] == '/') )
-            break;
-
-        last_symbol = url[i];
-    }
-
-    //std::cout << "protocol -> " << protocol << std::endl;
-
-    return protocol;
-}
-
-std::string getHost( const std::string& url )
-{
-    std::string protocol = getProtocol(url);
-    std::string url_copy = url;
-    url_copy = url_copy.replace(url_copy.find_first_of(protocol), protocol.size(), "");
-
-    //std::cout << "host -> " << url_copy << std::endl;
-
-    std::string host = "";
-    for(int i = 0; i < (int)url_copy.size(); i++)
-    {
-        if( url_copy[i] == '\\' || url_copy[i] == '/' )
-            break;
-
-        host += url_copy[i];
-    }
-
-    return host;
-}
-
-std::string getUrlPath( const std::string& url )
-{
-    std::string proto_host = getProtocol(url) + getHost(url);
-    std::string url_copy = url;
-    url_copy = url_copy.replace(url_copy.find_first_of(proto_host), proto_host.size(), "");
-
-    //std::cout << "UrlPath -> " << url_copy << std::endl;
-
-    std::string url_path = "";
-    for(int i = 0; i < (int)url_copy.size(); i++)
-    {
-        if( url_copy[i] == '?' )
-            break;
-
-        url_path += url_copy[i];
-    }
-
-    return url_path;
-}
-
 std::vector<std::string> split( const std::string& str, char a )
 {
     std::vector<std::string> string_arr;
@@ -146,7 +87,7 @@ int main(int argc, char *argv[])
 
     request.protocol = getProtocol( params["-get"][0] );
     request.host = getHost( params["-get"][0] );
-    request.action = getUrlPath( params["-get"][0] );
+    request.action = getAction( params["-get"][0] );
     request.addHeader( "Referer", "www.vk.com" );
     request.addHeader( "User-Agent", "Google Chrome");
     request.addCookie( "CSRF-Token", "sdfsdfsdfsdf" );
